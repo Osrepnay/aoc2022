@@ -1,9 +1,7 @@
 module Day4.Part2 (thisMain) where
 
-import           Data.Char
-import qualified Data.List as L
-import           Data.List.Split
-import           System.IO
+import Data.List.Split
+import System.IO
 
 thisMain :: IO ()
 thisMain = do
@@ -17,7 +15,7 @@ listTup2 :: [a] -> (a, a)
 listTup2 xs = (head xs, xs !! 1)
 
 overlaps :: (Int, Int) -> (Int, Int) -> Bool
-overlaps ec@(a, b) e@(c, d)
+overlaps ec@(a, b) e@(c, _)
     | a == c    = True
     | a > c     = overlaps e ec
     | otherwise = b >= c

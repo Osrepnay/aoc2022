@@ -47,6 +47,8 @@ executable aoc2022-exe
       Day3.Part2
       Day4.Part1
       Day4.Part2
+      Day5.Part1
+      Day5.Part2
       Paths_aoc2022
   hs-source-dirs:
       app

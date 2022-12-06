@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Day5.Part2
+import Day6.Part2
 
 main :: IO ()
 main = thisMain

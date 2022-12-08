@@ -1,6 +1,6 @@
 module Day6.Part1 (thisMain) where
 
-import qualified Data.List       as L
+import qualified Data.List as L
 import           System.IO
 
 thisMain :: IO ()

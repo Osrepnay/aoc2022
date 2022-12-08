@@ -1,7 +1,7 @@
 module Day2.Part2 (thisMain) where
 
-import Data.Char
-import System.IO
+import           Data.Char
+import           System.IO
 
 thisMain :: IO ()
 thisMain = do

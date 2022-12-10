@@ -1,7 +1,7 @@
 module Day1.Part1 (thisMain) where
 
-import           Data.List.Split
-import           System.IO
+import Data.List.Split
+import System.IO
 
 thisMain :: IO ()
 thisMain = do

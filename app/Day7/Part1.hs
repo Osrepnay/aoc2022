@@ -4,8 +4,6 @@ import qualified Data.List       as L
 import           Data.List.Split
 import           System.IO
 
-import           Debug.Trace
-
 type Name = String
 data File = Dir Name [File] | Single Name Int deriving (Show)
 data Elfcrumb = Elfcrumb Name [File] [File] deriving (Show)

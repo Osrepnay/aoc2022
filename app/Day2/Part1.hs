@@ -1,7 +1,7 @@
 module Day2.Part1 (thisMain) where
 
-import           Data.Char
-import           System.IO
+import Data.Char
+import System.IO
 
 data GameRes = Won | Lost | Draw
 

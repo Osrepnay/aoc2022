@@ -1,5 +1,5 @@
 name:                aoc2022
-version:             0.1.12.0
+version:             0.1.13.0
 github:              "Osrepnay/aoc2022"
 license:             MIT
 author:              "Author name here"
@@ -23,6 +23,7 @@ dependencies:
 - base >= 4.7 && < 5
 - split
 - containers
+- transformers
 
 ghc-options:
 - -Wall

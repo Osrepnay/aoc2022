@@ -5,7 +5,7 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           aoc2022
-version:        0.1.13.0
+version:        0.1.14.0
 description:    Please see the README on GitHub at <https://github.com/Osrepnay/aoc2022#readme>
 homepage:       https://github.com/Osrepnay/aoc2022#readme
 bug-reports:    https://github.com/Osrepnay/aoc2022/issues

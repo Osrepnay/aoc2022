@@ -1,7 +1,6 @@
 module Day9.Part2 (thisMain) where
 
 import           Data.Bifunctor
-import qualified Data.List      as L
 import           Data.Set
 import qualified Data.Set       as S
 import           System.IO

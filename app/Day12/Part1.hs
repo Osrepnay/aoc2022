@@ -5,7 +5,6 @@ import qualified Data.List     as L
 import           Data.Maybe
 import           Data.Sequence (Seq (..), (><))
 import qualified Data.Sequence as Seq
-import           Data.Set      (Set)
 import qualified Data.Set      as S
 import           System.IO
 

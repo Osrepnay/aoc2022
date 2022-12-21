@@ -10,7 +10,7 @@ thisMain = do
     print
         $ product
         $ blueprintGeodes (Resources 0 0 0 0) (Resources 1 0 0 0) 32
-        <$> take 3 blueprints
+        <$> blueprints
     hClose handle
 
 data Resources = Resources
@@ -49,27 +49,28 @@ data Blueprint = Blueprint
 blueprintGeodes :: Resources -> Resources -> Int -> Blueprint -> Int
 blueprintGeodes res robots mins bp
     | mins == 0 = resGeode res
+    | resValid madeGeodeRes = blueprintGeodes
+        (robotWork madeGeodeRes)
+        madeGeodeRob
+        (mins - 1)
+        bp
     | otherwise = maximum
         $ (\(nres, nrob) -> blueprintGeodes (robotWork nres) nrob (mins - 1) bp)
         <$> (res, robots)
             :
                 [ (madeOreRes, madeOreRob)
                 | resValid madeOreRes
-                , resOre madeOreRob * mins + resOre res <= resOre (maxCosts bp) * mins
+                , resOre robots * mins + resOre res < resOre (maxCosts bp) * mins
                 ]
             ++
                 [ (madeClayRes, madeClayRob)
                 | resValid madeClayRes
-                , resClay madeClayRob * mins + resClay res <= resClay (maxCosts bp) * mins
+                , resClay robots * mins + resClay res < resClay (maxCosts bp) * mins
                 ]
             ++
                 [ (madeObbyRes, madeObbyRob)
                 | resValid madeObbyRes
-                , resObby madeObbyRob * mins + resObby res <= resObby (maxCosts bp) * mins
-                ]
-            ++
-                [ (madeGeodeRes, madeGeodeRob)
-                | resValid madeGeodeRes
+                , resObby robots * mins + resObby res < resObby (maxCosts bp) * mins
                 ]
   where
     robotWork = resAdd robots

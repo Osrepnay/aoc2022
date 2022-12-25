@@ -9,8 +9,6 @@ import           Data.Set        (Set)
 import qualified Data.Set        as S
 import           System.IO
 
-import Debug.Trace
-
 thisMain :: IO ()
 thisMain = do
     handle <- openFile "inputs/day16" ReadMode
@@ -27,33 +25,47 @@ thisMain = do
             (valveFlows, valveDists)
             zeroFlows
     let (aalessFlows, aalessDists) = wipe "AA" (zerolessFlows, zerolessDists)
-    print zerolessFlows
-    print zerolessDists
     let aaConns = M.toList $ M.delete "AA" $ zerolessDists ! "AA"
-    print
+    print zerolessDists
+    {- print
         $ maximum
-        $ (\(v, d) -> maxPressure aalessFlows aalessDists (60 - d - 1) v)
-        <$> aaConns
+        $ (\(v, d) -> maxPressure aalessFlows aalessDists (30 - d - 1) v)
+        <$> aaConns -}
     hClose handle
 
 maxPressure
     :: Map String Int
     -> Map String (Map String Int)
     -> Int
-    -> String
+    -> Map String Int
     -> Int
-maxPressure valveFlows valveDists minutes valve
+maxPressure flows dists mins valvesOn
+    | null unfrozen = maxPressure
+        flows
+        dists
+        (mins - minFrozen)
+        (subtract minFrozen <$> frozen)
+    | otherwise = maxPressure flows dists 
+  where
+    unfrozenDists = M.mapWithKey (\v _ -> dists ! v) unfrozen
+    minFrozen = minimum frozen
+    (unfrozen, frozen) = M.partition (== 0) valvesOn
+
+{- maxPressure
+    :: Map String Int
+    -> Map String (Map String Int)
+    -> Int
+    -> [(String, Int)]
+    -> Int
+maxPressure valveFlows valveDists minutes valves
     | minutes <= 0 = 0
-    | thisFlow == 0 = 0
+    -- | thisFlow == 0 = 0
     | otherwise = thisFlow * minutes
         + maximum
             (M.mapWithKey
             (\k a -> maxPressure flowsOpened valveDists (minutes - a - 1) k)
             thisDists)
-  where
-    flowsOpened = M.insert valve 0 valveFlows
-    thisFlow = valveFlows ! valve
-    thisDists = valveDists ! valve
+  where -}
 
 wipe
     :: String

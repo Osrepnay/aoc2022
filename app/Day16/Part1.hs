@@ -9,8 +9,6 @@ import           Data.Set        (Set)
 import qualified Data.Set        as S
 import           System.IO
 
-import Debug.Trace
-
 thisMain :: IO ()
 thisMain = do
     handle <- openFile "inputs/day16" ReadMode
@@ -21,7 +19,17 @@ thisMain = do
     let valveDists = M.fromList
             $ (\k -> (k, distsTo valveConns k))
             <$> M.keys valvesAll
-    print $ maxPressure valveFlows valveDists 30 "AA"
+    let zeroFlows = M.keys $ M.delete "AA" $ M.filter (== 0) valveFlows
+    let (zerolessFlows, zerolessDists) = foldl'
+            (flip wipe)
+            (valveFlows, valveDists)
+            zeroFlows
+    let (aalessFlows, aalessDists) = wipe "AA" (zerolessFlows, zerolessDists)
+    let aaConns = M.toList $ M.delete "AA" $ zerolessDists ! "AA"
+    print
+        $ maximum
+        $ (\(v, d) -> maxPressure aalessFlows aalessDists (30 - d - 1) v)
+        <$> aaConns
     hClose handle
 
 maxPressure
@@ -31,7 +39,8 @@ maxPressure
     -> String
     -> Int
 maxPressure valveFlows valveDists minutes valve
-    | minutes <= 0 || (thisFlow == 0 && valve /= "AA") = 0
+    | minutes <= 0 = 0
+    | thisFlow == 0 = 0
     | otherwise = thisFlow * minutes
         + maximum
             (M.mapWithKey
@@ -42,6 +51,17 @@ maxPressure valveFlows valveDists minutes valve
     thisFlow = valveFlows ! valve
     thisDists = valveDists ! valve
 
+wipe
+    :: String
+    -> (Map String Int, Map String (Map String Int))
+    -> (Map String Int, Map String (Map String Int))
+wipe valve (valveFlows, valveDists) =
+    ( filterKeyValve valveFlows
+    , M.map filterKeyValve $ filterKeyValve valveDists
+    )
+  where
+    filterKeyValve = M.filterWithKey (\k _ -> k /= valve)
+
 distsTo
     :: Map String (Set String)
     -> String
@@ -51,7 +71,6 @@ distsTo valveConns start = go
     (M.insert start 0 (M.map (const maxBound) valveConns))
     start
   where
-    go :: Set String -> Map String Int -> String -> Map String Int
     go unvisited dists valve
         | S.null unvisited = dists
         | otherwise        = go

@@ -1,11 +1,11 @@
 module Day21.Part2 (thisMain) where
 
-import Data.Char
-import Data.List.Split
-import Data.Map (Map, (!))
-import Data.Maybe
-import qualified Data.Map as M
-import System.IO
+import           Data.Char
+import           Data.List.Split
+import           Data.Map        (Map, (!))
+import qualified Data.Map        as M
+import           Data.Maybe
+import           System.IO
 
 thisMain :: IO ()
 thisMain = do
@@ -19,7 +19,7 @@ thisMain = do
     let rightPath = humnPath rightMath
     let (path, maths) =
             case leftPath of
-                Just x -> (x, (leftMath, rightMath))
+                Just x  -> (x, (leftMath, rightMath))
                 Nothing -> (fromJust rightPath, (rightMath, leftMath))
     print $ simplify $ isolateHumn maths path
     hClose handle
@@ -39,12 +39,12 @@ data Math
     deriving Show
 
 simplify :: Math -> Int
-simplify (Variable _) = error "can't simplify variable"
+simplify (Variable _)  = error "can't simplify variable"
 simplify (Bin Add l r) = simplify l + simplify r
 simplify (Bin Sub l r) = simplify l - simplify r
 simplify (Bin Mul l r) = simplify l * simplify r
 simplify (Bin Div l r) = simplify l `div` simplify r
-simplify (Number x) = x
+simplify (Number x)    = x
 
 isolateHumn :: (Math, Math) -> [Bool] -> Math
 isolateHumn (Variable "humn", other) _ = other
@@ -70,9 +70,9 @@ humnPath (Number _) = Nothing
 humnPath (Bin _ l r) = (isNothing lh :) <$> joinMaybes lh (humnPath r)
   where
     lh = humnPath l
-    joinMaybes (Just x) _ = Just x
+    joinMaybes (Just x) _       = Just x
     joinMaybes Nothing (Just x) = Just x
-    joinMaybes Nothing Nothing = Nothing
+    joinMaybes Nothing Nothing  = Nothing
 
 data MonkeyOp
     = ImmediateMonkey Int
@@ -84,12 +84,12 @@ extractLR (DelayMonkey l r _) = (l, r)
 abstractify :: String -> Map String MonkeyOp -> Math
 abstractify "humn" _ = Variable "humn"
 abstractify monkey ms = case thisOp of
-    ImmediateMonkey x -> Number x
+    ImmediateMonkey x   -> Number x
     DelayMonkey a b '+' -> Bin Add (abstractify a ms) (abstractify b ms)
     DelayMonkey a b '-' -> Bin Sub (abstractify a ms) (abstractify b ms)
     DelayMonkey a b '*' -> Bin Mul (abstractify a ms) (abstractify b ms)
     DelayMonkey a b '/' -> Bin Div (abstractify a ms) (abstractify b ms)
-    DelayMonkey {} -> error "unknown monkey operation"
+    DelayMonkey {}      -> error "unknown monkey operation"
   where
     thisOp = ms ! monkey
 

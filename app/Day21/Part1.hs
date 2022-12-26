@@ -1,10 +1,10 @@
 module Day21.Part1 (thisMain) where
 
-import Data.Char
-import Data.List.Split
-import Data.Map (Map, (!))
-import qualified Data.Map as M
-import System.IO
+import           Data.Char
+import           Data.List.Split
+import           Data.Map        (Map, (!))
+import qualified Data.Map        as M
+import           System.IO
 
 thisMain :: IO ()
 thisMain = do
@@ -40,4 +40,4 @@ parseMonkey s = (name, monkeyOp)
                 "-" -> (-)
                 "*" -> (*)
                 "/" -> div
-                _ -> error "unknown monkey operation"
+                _   -> error "unknown monkey operation"

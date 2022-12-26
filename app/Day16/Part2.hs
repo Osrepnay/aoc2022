@@ -3,7 +3,7 @@ module Day16.Part2 (thisMain) where
 import           Data.Bifunctor
 import           Data.Foldable
 import           Data.Function
-import qualified Data.List as    L
+import qualified Data.List       as L
 import           Data.List.Split
 import           Data.Map.Strict (Map, (!))
 import qualified Data.Map.Strict as M

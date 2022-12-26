@@ -1,8 +1,8 @@
 module Day20.Part1 (thisMain) where
 
-import qualified Data.List as L
-import Data.Maybe
-import System.IO
+import qualified Data.List  as L
+import           Data.Maybe
+import           System.IO
 
 thisMain :: IO ()
 thisMain = do
@@ -26,11 +26,11 @@ mix (n : ns) mixLen toMix =  mix
     moveTo = if maybeZero == 0 then mixLen - 1 else maybeZero
 
 insertAt :: Int -> a -> [a] -> [a]
-insertAt 0 n xs = n : xs
-insertAt _ _ [] = error "insert index too big"
+insertAt 0 n xs        = n : xs
+insertAt _ _ []        = error "insert index too big"
 insertAt ci n (x : xs) = x : insertAt (ci - 1) n xs
 
 deleteAt :: Int -> [a] -> [a]
-deleteAt _ [] = error "delete index too big"
-deleteAt 0 (_ : xs) = xs
+deleteAt _ []        = error "delete index too big"
+deleteAt 0 (_ : xs)  = xs
 deleteAt ci (x : xs) = x : deleteAt (ci - 1) xs

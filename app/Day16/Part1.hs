@@ -26,6 +26,8 @@ thisMain = do
             zeroFlows
     let (aalessFlows, aalessDists) = wipe "AA" (zerolessFlows, zerolessDists)
     let aaConns = M.toList $ M.delete "AA" $ zerolessDists ! "AA"
+    print aalessFlows
+    print aalessDists
     print
         $ maximum
         $ (\(v, d) -> maxPressure aalessFlows aalessDists (30 - d - 1) v)

@@ -1,7 +1,9 @@
 module Day16.Part2 (thisMain) where
 
+import           Data.Bifunctor
 import           Data.Foldable
 import           Data.Function
+import qualified Data.List as    L
 import           Data.List.Split
 import           Data.Map.Strict (Map, (!))
 import qualified Data.Map.Strict as M
@@ -25,47 +27,47 @@ thisMain = do
             (valveFlows, valveDists)
             zeroFlows
     let (aalessFlows, aalessDists) = wipe "AA" (zerolessFlows, zerolessDists)
-    let aaConns = M.toList $ M.delete "AA" $ zerolessDists ! "AA"
-    print zerolessDists
-    {- print
-        $ maximum
-        $ (\(v, d) -> maxPressure aalessFlows aalessDists (30 - d - 1) v)
-        <$> aaConns -}
+    let aaFlows = zerolessFlows ! "AA"
+    let aaDists = M.delete "AA" $ zerolessDists ! "AA"
+    let someAaFlows = M.insert "AA" aaFlows aalessFlows
+    let someAaDists = M.insert "AA" aaDists aalessDists
+    print $ maxPressure someAaFlows someAaDists 26 [("AA", 0), ("AA", 0)]
     hClose handle
 
 maxPressure
     :: Map String Int
     -> Map String (Map String Int)
     -> Int
-    -> Map String Int
+    -> [(String, Int)]
     -> Int
 maxPressure flows dists mins valvesOn
+    | mins <= 0 = 0
     | null unfrozen = maxPressure
         flows
         dists
         (mins - minFrozen)
-        (subtract minFrozen <$> frozen)
-    | otherwise = maxPressure flows dists 
+        (second (subtract minFrozen) <$> frozen)
+    | otherwise = maximum
+        (0 :
+            [ totalReleased + maxPressure
+                (M.union (M.fromList (second (const 0) <$> ds)) flows)
+                dists
+                (mins - 1)
+                ((second (subtract 1) <$> frozen) ++ ds)
+            | ds <- distArrangements
+            , length (L.nubBy ((==) `on` fst) ds) == length ds
+            , let dsFlows = (flows !) . fst <$> ds
+            , 0 `notElem` dsFlows
+            , let totalReleased = sum
+                    $ (\(d, f) -> (mins - d - 1) * f)
+                    <$> zipWith (\(_, a) b -> (a, b)) ds dsFlows
+            ])
   where
-    unfrozenDists = M.mapWithKey (\v _ -> dists ! v) unfrozen
-    minFrozen = minimum frozen
-    (unfrozen, frozen) = M.partition (== 0) valvesOn
-
-{- maxPressure
-    :: Map String Int
-    -> Map String (Map String Int)
-    -> Int
-    -> [(String, Int)]
-    -> Int
-maxPressure valveFlows valveDists minutes valves
-    | minutes <= 0 = 0
-    -- | thisFlow == 0 = 0
-    | otherwise = thisFlow * minutes
-        + maximum
-            (M.mapWithKey
-            (\k a -> maxPressure flowsOpened valveDists (minutes - a - 1) k)
-            thisDists)
-  where -}
+    distArrangements = traverse M.toList unfrozenDists
+    unfrozenDists = (dists !) <$> unfrozenValves
+    minFrozen = snd (minimum frozen)
+    unfrozenValves = fst <$> unfrozen
+    (unfrozen, frozen) = L.partition ((== 0) . snd) valvesOn
 
 wipe
     :: String

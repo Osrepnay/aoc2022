@@ -1,11 +1,11 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.35.0.
+-- This file has been generated from package.yaml by hpack version 0.35.1.
 --
 -- see: https://github.com/sol/hpack
 
 name:           aoc2022
-version:        0.1.24.0
+version:        0.1.25.0
 description:    Please see the README on GitHub at <https://github.com/Osrepnay/aoc2022#readme>
 homepage:       https://github.com/Osrepnay/aoc2022#readme
 bug-reports:    https://github.com/Osrepnay/aoc2022/issues
@@ -75,6 +75,7 @@ executable aoc2022-exe
       Day23.Part2
       Day24.Part1
       Day24.Part2
+      Day25.Part1
       Day3.Part1
       Day3.Part2
       Day4.Part1
